@@ -3,17 +3,24 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_errors(registrationForm) }}
+<div class="flex justify-content-center row">
+    <div class="col-md-6 p-4">
+        <h1>Registration</h1>
+        {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
+        {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+        {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}, {
             label: 'Password'
         }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input p-2'}}) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        <button type="submit" class="btn btn-dark">Register</button>
+        {{ form_end(registrationForm) }}
+    </div>
+    <div class="col-md-6">
+        <img class="w-100" src="{{ asset('images/register.jpeg') }}">
+    </div>
+</div>
 {% endblock %}
