@@ -7,14 +7,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends AbstractController
+class LoginController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        //if (in_array("student", $this->getUser()->getRoles())) {
-          //   return $this->redirectToRoute('/book');
-         //}
+        // if ($this->getUser()) {
+        //     return $this->redirectToRoute('target_path');
+        // }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

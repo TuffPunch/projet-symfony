@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
-use App\Security\UserAuthAuthenticator;
+use App\Security\LoginAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -30,14 +30,16 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
             $user->setRoles(["ROLE_STUDENT"]);
+
 
             $entityManager->persist($user);
             $entityManager->flush();
 
             // do anything else you need here, like send an email
 
-            return $security->login($user, UserAuthAuthenticator::class, 'main');
+            return $security->login($user, LoginAuthenticator::class, 'main');
         }
 
         return $this->render('registration/register.html.twig', [

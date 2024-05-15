@@ -13,10 +13,14 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
         main:
             lazy: true
-            provider: app_user_provider
-            custom_authenticator: App\Security\UserAuthAuthenticator
+            custom_authenticator: App\Security\LoginAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -26,6 +30,9 @@ security:
                 secret: '%kernel.secret%'
                 lifetime: 604800
                 path: /
+                # by default, the feature is enabled by checking a checkbox in the
+                # login form, uncomment the following line to always enable it.
+                #always_remember_me: true
                 # by default, the feature is enabled by checking a checkbox in the
                 # login form, uncomment the following line to always enable it.
                 #always_remember_me: true
