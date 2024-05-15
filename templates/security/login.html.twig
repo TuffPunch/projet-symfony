@@ -3,35 +3,108 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <style>
+        /* CSS styles */
+        .login-container {
+            background-image: url('https://images.unsplash.com/photo-1545875133-4105af0f122f?q=80&w=1894&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .quote {
+            font-style: italic;
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+        .login-form {
+                display: flex;
+                flex-direction: column;
+                background-color: rgba(255, 255, 255, 0.8);
+                padding: 20px;
+                border-radius: 10px;
+                text-align: left;
+                margin: 0 auto;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 400px;
+
+        }
+
+        .login-form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        .login-form input[type="email"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 7px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 38%;
+            margin-top: 3%;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .checkbox {
+            white-space: nowrap; /* Prevent line wrapping */
+        }
+    </style>
+
+    <div class="login-container">
+
+        <div class="login-form">
+            <div class="quote">
+                "Today a reader, Tomorrow a leader"
+            </div>
+            <h1>Log in!</h1>
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <form method="post">
+                <label for="inputEmail">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me"> Remember me
+                    </label>
+                </div>
+
+                <button class="btn btn-lg btn-primary" type="submit">
+                    Send
+                </button>
+            </form>
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
 {% endblock %}
