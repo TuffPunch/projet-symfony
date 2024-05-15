@@ -10,17 +10,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/reservation')]
 class ReservationController extends AbstractController
 {
-    #[IsGranted("ROLE_ADMIN")]
     #[Route('/', name: 'app_reservation_show', methods: ['GET'])]
-    public function index(ReservationRepository $reservationRepository): Response
+    public function index(ReservationRepository $reservationRepository, Security $security): Response
     {
+
+        $user = $security->getUser();
+        $role = $user ? $user->getRoles()[0] : null;
+
+        if ($role === 'ROLE_ADMIN') {
+            $reservations = $reservationRepository->findAll();
+        } elseif ($role === 'ROLE_STUDENT') {
+            $reservations = $user->getReservations();
+        } else {
+            throw $this->createAccessDeniedException('Unauthorized access');
+        }
         return $this->render('reservation/index.html.twig', [
-            'reservations' => $reservationRepository->findAll(),
+            'reservations' => $reservations,
         ]);
     }
 
