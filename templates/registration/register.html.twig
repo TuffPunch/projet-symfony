@@ -79,6 +79,10 @@
             }) }}
             {{ form_row(registrationForm.agreeTerms) }}
 
+            <span>
+                Already have an account ? <a href="{{ path('app_login') }}">Login Now</a>
+            </span>
+
             <button type="submit" class="btn">Send</button>
             {{ form_end(registrationForm) }}
         </div>

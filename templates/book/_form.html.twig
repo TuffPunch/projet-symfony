@@ -1,4 +1,66 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+
+<style>
+    .register-container {
+        display: flex;
+    }
+
+    .register-form label {
+        margin-bottom: 5px;
+        font-weight: bold;
+        width: 100px;
+        margin-right: 10px;
+    }
+
+    .register-form input[type="text"]{
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-bottom: 15px;
+    }
+
+    .register-form {
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: left;
+        margin: 0 auto;
+        width: 30%;
+    }
+    h1 {
+        color: #333;
+    }
+
+    .btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 38%;
+        margin-top: 5%;
+
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    h1{
+        text-align: center;
+    }
+</style>
+
+<div class="register-container">
+    <div class="register-form">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+

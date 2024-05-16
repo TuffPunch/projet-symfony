@@ -6,6 +6,7 @@ use App\Entity\Book;
 use App\Entity\Reservation;
 use App\Form\BookType;
 use App\Repository\BookRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +19,18 @@ class BookController extends AbstractController
 {
     #[IsGranted("ROLE_STUDENT")]
     #[Route('/list', name: 'student_book_index', methods: ['GET'])]
-    public function student_index(BookRepository $bookRepository): Response
+    public function student_index(BookRepository $bookRepository, UserRepository $userRepository): Response
     {
+        $books = $bookRepository->getAllBooks();
+
+
+
+
+
         return $this->render('book/student_index.html.twig', [
-            'books' => $bookRepository->findAll(),
+            'books' => $books,
+            'currentDate' => new \DateTime(),
+            'userId' => $userRepository->findOneBy(['email' => $this->getUser()->getUserIdentifier()])->getUserId()
         ]);
     }
 
@@ -112,6 +121,7 @@ class BookController extends AbstractController
        $resD=new \DateTime();
        $reservation->setReservationDate($resD);
         $reservation->setStudent($this->getUser());
+        $resD = clone $resD;
         $reservation->setReturnDate($resD->modify("+30 days"));
         $entityManager->persist($reservation);
         $entityManager->flush();

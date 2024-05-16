@@ -1,35 +1,61 @@
-{% extends 'base.html.twig' %}
+{% extends 'logged.base.html.twig' %}
 
 {% block title %}Reservation index{% endblock %}
 
-{% block body %}
-    <h1>Reservation index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Reservation_date</th>
-                <th>Return_date</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for reservation in reservations %}
-            <tr>
-                <td>{{ reservation.id }}</td>
-                <td>{{ reservation.reservationDate ? reservation.reservationDate|date('Y-m-d') : '' }}</td>
-                <td>{{ reservation.returnDate ? reservation.returnDate|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">show</a>
-                    <a href="{{ path('app_reservation_validation', {'idR': reservation.id}) }}">validate</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+{% block body %}
+
+
+    <h1 class="text-center">Books Management</h1>
+    <div class="container p-0">
+        <div class="row align-items-baseline">
+            <div class="col-md-11">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        {% if (is_granted("ROLE_ADMIN")) %}
+                        <th>Student</th>
+                        {% endif %}
+                        <th>Reservation_date</th>
+                        <th>Return_date</th>
+                        <th>Validated
+                            {% if (is_granted("ROLE_ADMIN")) %}
+                        <th>Actions</th>
+                        {% endif %}
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for reservation in reservations %}
+
+
+                        <tr>
+                            <td>{{ reservation.id }}
+                            {% if (is_granted("ROLE_ADMIN")) %}
+                            <td>{{ reservation.student.email }}
+                            {% endif %}
+                            <td>{{ reservation.reservationDate ? reservation.reservationDate|date('Y-m-d') : '' }}</td>
+                            <td>{{ reservation.returnDate ? reservation.returnDate|date('Y-m-d') : '' }}</td>
+                            <td>
+                                {% if (reservation.validator == null) %} <i class="bi bi-bag-x"></i> {% else %} <i class="bi bi-bag-check"></i> {% endif %}
+                            </td>
+                            {% if (is_granted("ROLE_ADMIN")) %}
+
+                            <td>
+                                <a href="{{ path('app_reservation_validation', {'idR': reservation.id}) }}"><i class="bi bi-bag-check"></i></a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}

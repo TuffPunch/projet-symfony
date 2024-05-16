@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +20,30 @@ class BookRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Book::class);
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function getAllBooks(): ?array{
+        $conn = $this->getEntityManager()->getConnection();
+
+        $query = $conn->executeQuery('
+            SELECT book.id, book.name, book.author, r.return_date AS return_date, r.validator_id
+            FROM book
+            LEFT JOIN reservation r ON r.book_id = book.id AND r.return_date = (
+              SELECT MAX(r2.return_date)
+              FROM reservation r2
+              WHERE r2.book_id = book.id
+            )
+            GROUP BY book.id
+
+            ');
+
+        return $query->fetchAllAssociative();
+
+
     }
 
     //    /**

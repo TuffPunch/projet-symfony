@@ -3,34 +3,61 @@
 {% block title %}Book index{% endblock %}
 
 {% block body %}
-<h1>All Books</h1>
+    <style>
+        .icons{
+            font-size: 30px;
+        }
+        td{
+            vertical-align: middle;
+        }
+    </style>
+<h1 class="text-center">All Books</h1>
+    <div class="container p-0">
+        <div class="row align-items-baseline">
+            <div class="col-md-11">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th>Name</th>
+                        <th>Author</th>
+                        <th>actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for book in books %}
+                        <tr>
+                            <td>{{ book.id }}</td>
+                            <td>{{ book.name }}</td>
+                            <td>{{ book.author }}</td>
+                            <td>
+                                <a class="p-2 icons" href="{{ path('student_book_show', {'id': book.id}) }}"><i class="bi bi-book"></i></a>
+                                {# if no reservation occured on the book #}
+                                {% if book.return_date == null and book.student_id == null %}
+                                <a class="p-2 icons" href="{{ path('student_book_res', {'idb': book.id}) }}"><i class="bi bi-bag-plus-fill"></i></a>
+                                {% elseif (book.return_date|date('Y-m-d') >= currentDate|date('Y-m-d') and (book.validator_id == null))  %}
+                                    <a class="p-2 icons" href="{{ path('student_book_res', {'idb': book.id}) }}"><i class="bi bi-bag-plus-fill"></i></a>
+                                {% endif %}
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Author</th>
-        <th>actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for book in books %}
-    <tr>
-        <td>{{ book.id }}</td>
-        <td>{{ book.name }}</td>
-        <td>{{ book.author }}</td>
-        <td>
-            <a href="{{ path('student_book_show', {'id': book.id}) }}">show</a>
-            <a href="{{ path('student_book_res', {'idb': book.id}) }}">book</a>
-        </td>
-    </tr>
-    {% else %}
-    <tr>
-        <td colspan="4">no records found</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+{#                                {% if (((book.return_date|date('Y-m-d') < currentDate|date('Y-m-d')) and (userId != book.student_id)) or (book.return_date == null) or (book.validator_id == null)) %}#}
+{#                                <a class="p-2 icons" href="{{ path('student_book_res', {'idb': book.id}) }}"><i class="bi bi-bag-plus-fill"></i></a>#}
+{#                                {% endif %}#}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No books found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
 
 {% endblock %}

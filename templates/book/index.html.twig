@@ -25,6 +25,7 @@
                            <td>
                                <a class="p-2" href="{{ path('app_book_show', {'id': book.id}) }}"><i class="bi bi-book"></i></a>
                                <a class="p-2" href="{{ path('app_book_edit', {'id': book.id}) }}"><i class="bi bi-pen"></i></a>
+                               {{ include('book/_delete_form.html.twig') }}
                            </td>
                        </tr>
                    {% else %}

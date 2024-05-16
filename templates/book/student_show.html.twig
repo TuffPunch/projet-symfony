@@ -3,25 +3,36 @@
 {% block title %}Book{% endblock %}
 
 {% block body %}
-    <h1>Book</h1>
+<style>
+    .icons{
+        font-size: 30px;
+    }
+    td{
+        vertical-align: middle;
+    }
+</style>
+<h1 class="text-center">{{ book.name }}'s Details</h1>
+<div class="container p-0">
+    <div class="row align-items-baseline">
+        <div class="col-md-11">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Author</th>
+                </tr>
+                </thead>
+                <tbody>
+        <tr>
+        </tr>
+        <tr>
+            <td>{{ book.name }}</td> <td>{{ book.author }}</td>
+        </tr>
 
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ book.id }}</td>
-        </tr>
-        <tr>
-            <th>Name</th>
-            <td>{{ book.name }}</td>
-        </tr>
-        <tr>
-            <th>Author</th>
-            <td>{{ book.author }}</td>
-        </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('student_book_index') }}">back to list</a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
