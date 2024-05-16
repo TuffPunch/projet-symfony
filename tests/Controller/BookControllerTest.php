@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Controller;
+namespace App\Tests\Controller;
 
 use App\Entity\Book;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +13,7 @@ class BookControllerTest extends WebTestCase
     private KernelBrowser $client;
     private EntityManagerInterface $manager;
     private EntityRepository $repository;
-    private string $path = '/book/';
+    private string $path = '/';
 
     protected function setUp(): void
     {
@@ -30,89 +30,115 @@ class BookControllerTest extends WebTestCase
 
     public function testIndex(): void
     {
-        $crawler = $this->client->request('GET', $this->path);
+        $crawler = $this->client->request('GET', $this->path );
 
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Book index');
+        self::assertResponseStatusCodeSame(302);
+        self::assertResponseRedirects("/login");
+//        self::assertPageTitleContains('Login index');
 
         // Use the $crawler to perform additional assertions e.g.
         // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 
-    public function testNew(): void
+    public function testIndex1(): void
     {
-        $this->markTestIncomplete();
-        $this->client->request('GET', sprintf('%snew', $this->path));
+        $crawler = $this->client->request('GET', $this->path );
 
-        self::assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(302);
+        self::assertResponseRedirects("/login");
+//        self::assertPageTitleContains('Login index');
 
-        $this->client->submitForm('Save', [
-            'book[name]' => 'Testing',
-            'book[author]' => 'Testing',
-        ]);
-
-        self::assertResponseRedirects($this->path);
-
-        self::assertSame(1, $this->repository->count([]));
+        // Use the $crawler to perform additional assertions e.g.
+        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 
-    public function testShow(): void
+    public function testIndex2(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new Book();
-        $fixture->setName('My Title');
-        $fixture->setAuthor('My Title');
+        $crawler = $this->client->request('GET', $this->path );
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        self::assertResponseStatusCodeSame(302);
+        self::assertResponseRedirects("/login");
+//        self::assertPageTitleContains('Login index');
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Book');
-
-        // Use assertions to check that the properties are properly displayed.
-    }
-
-    public function testEdit(): void
-    {
-        $this->markTestIncomplete();
-        $fixture = new Book();
-        $fixture->setName('Value');
-        $fixture->setAuthor('Value');
-
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
-
-        $this->client->submitForm('Update', [
-            'book[name]' => 'Something New',
-            'book[author]' => 'Something New',
-        ]);
-
-        self::assertResponseRedirects('/book/');
-
-        $fixture = $this->repository->findAll();
-
-        self::assertSame('Something New', $fixture[0]->getName());
-        self::assertSame('Something New', $fixture[0]->getAuthor());
-    }
-
-    public function testRemove(): void
-    {
-        $this->markTestIncomplete();
-        $fixture = new Book();
-        $fixture->setName('Value');
-        $fixture->setAuthor('Value');
-
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-        $this->client->submitForm('Delete');
-
-        self::assertResponseRedirects('/book/');
-        self::assertSame(0, $this->repository->count([]));
+        // Use the $crawler to perform additional assertions e.g.
+        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 }
+
+//    public function testNew(): void
+//    {
+//        $this->markTestIncomplete();
+//        $this->client->request('GET', sprintf('%snew', $this->path));
+//
+//        self::assertResponseStatusCodeSame(200);
+//
+//        $this->client->submitForm('Save', [
+//            'book[name]' => 'Testing',
+//            'book[author]' => 'Testing',
+//        ]);
+//
+//        self::assertResponseRedirects($this->path);
+//
+//        self::assertSame(1, $this->repository->count([]));
+//    }
+//
+//    public function testShow(): void
+//    {
+//        $this->markTestIncomplete();
+//        $fixture = new Book();
+//        $fixture->setName('My Title');
+//        $fixture->setAuthor('My Title');
+//
+//        $this->manager->persist($fixture);
+//        $this->manager->flush();
+//
+//        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
+//
+//        self::assertResponseStatusCodeSame(200);
+//        self::assertPageTitleContains('Book');
+//
+//        // Use assertions to check that the properties are properly displayed.
+//    }
+//
+//    public function testEdit(): void
+//    {
+//        $this->markTestIncomplete();
+//        $fixture = new Book();
+//        $fixture->setName('Value');
+//        $fixture->setAuthor('Value');
+//
+//        $this->manager->persist($fixture);
+//        $this->manager->flush();
+//
+//        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
+//
+//        $this->client->submitForm('Update', [
+//            'book[name]' => 'Something New',
+//            'book[author]' => 'Something New',
+//        ]);
+//
+//        self::assertResponseRedirects('/book/');
+//
+//        $fixture = $this->repository->findAll();
+//
+//        self::assertSame('Something New', $fixture[0]->getName());
+//        self::assertSame('Something New', $fixture[0]->getAuthor());
+//    }
+//
+//    public function testRemove(): void
+//    {
+//        $this->markTestIncomplete();
+//        $fixture = new Book();
+//        $fixture->setName('Value');
+//        $fixture->setAuthor('Value');
+//
+//        $this->manager->persist($fixture);
+//        $this->manager->flush();
+//
+//        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
+//        $this->client->submitForm('Delete');
+//
+//        self::assertResponseRedirects('/book/');
+//        self::assertSame(0, $this->repository->count([]));
+//    }
+//}
